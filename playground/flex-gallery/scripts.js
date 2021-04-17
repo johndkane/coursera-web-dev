@@ -27,7 +27,7 @@ const populateGallery = function (imgUrls, colElements) {
     const fitToHeight = !!document.flexGallery.fitToHeight,
         totalCols = colElements.length,
         columnMetaInfos = [],
-        totalItems = imgUrls.length || 0,
+        totalItems = imgUrls.length,
         avgItemsPerCol = totalItems / totalCols,
         upperAmountPerCol = Math.ceil(avgItemsPerCol);
 
