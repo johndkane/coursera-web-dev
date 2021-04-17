@@ -31,15 +31,14 @@ const populateGallery = function (imgUrls, colElements) {
         avgAmountPerCol = totalItems / totalCols,
         upperAmountPerCol = Math.ceil(avgAmountPerCol);
 
-    let totalItemsUsed = 0,
-        useCeil = true;
+    let usedItemCount = 0;
 
     // create meta data per column
     for (let iCol = 0; iCol < colElements.length; iCol += 1) {
 
-        const remainingItems = totalItems - totalItemsUsed,
+        const remainingItems = totalItems - usedItemCount,
             colItemCount = remainingItems < upperAmountPerCol ? remainingItems : upperAmountPerCol,
-            outerSliceStart = totalItemsUsed,
+            outerSliceStart = usedItemCount,
             outerSliceEnd = outerSliceStart + colItemCount,
             colMeta = {
                 colIndex: iCol,
@@ -53,8 +52,7 @@ const populateGallery = function (imgUrls, colElements) {
 
         fLog(() => colMeta);
 
-        totalItemsUsed += colItemCount;
-        useCeil = !useCeil;
+        usedItemCount += colItemCount;
     }
 
     // populate DOM
