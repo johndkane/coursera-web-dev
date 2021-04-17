@@ -71,9 +71,6 @@ const populateGallery = function (imgUrls, colElements) {
 
 };
 
-const LoadedImageInfo = function () { },
-    LoadedGalleryItemInfo = function () { };
-
 const projectGalleryItem = function (imgUrl, colEl) {
 
     const colWidth = colEl.width,
@@ -110,3 +107,6 @@ const loadImage = function (imgUrl) {
 
     return info;
 };
+
+const LoadedImageInfo = function () { },
+    LoadedGalleryItemInfo = function () { };
