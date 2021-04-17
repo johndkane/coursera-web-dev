@@ -1,11 +1,26 @@
 document.flexGallery = document.flexGallery || {};
 
 const fLog = function (fnGetObj) {
-    if (document.flexGallery.customLoggingEnabled && typeof (fnGetObj) === 'function')
+    if (document.flexGallery.customLoggingEnabled && typeof fnGetObj === 'function')
         console.log(fnGetObj());
 }
 
 const populateGallery = function (imgUrls, colElements) {
+
+    if (!imgUrls)
+        throw Error('missing the image urls argument');
+
+    if (!Array.isArray(imgUrls))
+        throw Error('the image urls argument is not an array');
+
+    if (!colElements)
+        throw Error('missing the column elements collection argument');
+
+    if (colElements['length'] === undefined)
+        throw Error('column elements collection argument does not have a length property');
+
+    if (imgUrls.length !== 0 && colElements.length <= 0)
+        throw Error('no columns available to fit the ' + imgUrls.length + ' images into');
 
     // calculate column contents
 

@@ -48,10 +48,10 @@
       "https://loremflickr.com/425/450/field",
       "https://loremflickr.com/1000/1000/grazing"];
 
-    const colsSelector = 'body > div.row > div.column',
-      colElements = document.querySelectorAll(colsSelector);
+    const columnsSelector = 'body > div.row > div.column',
+      colElements = document.querySelectorAll(columnsSelector);
 
-    populateGallery(imgUrls || [], colElements || []);
+    populateGallery(imgUrls, colElements);
 
   </script>
 
