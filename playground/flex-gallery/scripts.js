@@ -70,3 +70,41 @@ const populateGallery = function (imgUrls, colElements) {
     }
 
 }
+
+const LoadedImageInfo = function () { };
+const LoadedGalleryItemInfo = function () { };
+
+const projectGalleryItem = function (imgUrl, colEl) {
+
+    const colWidth = colEl.width,
+        loadedImageInfo = loadImage(imgUrl),
+        imgWidthDiffFactor = colWidth / loadedImageInfo.loadedWidth,
+        galleryImageHeight = loadedImageInfo.loadedHeight * imgWidthDiffFactor,
+        info = Object.assign(new LoadedGalleryItemInfo(), {
+            colEl,
+            colWidth,
+            loadedImageInfo,
+            imgWidthDiffFactor,
+            galleryImageHeight
+        });
+
+    return info;
+}
+
+const loadImage = function (imgUrl) {
+
+    const imgEl = document.createElement("img");
+    imgEl.src = imgUrl;
+
+    const loadedWidth = imgEl.width,
+        loadedHeight = imgEl.height,
+        info = Object.assign(new LoadedImageInfo(), {
+            loadedWidth,
+            loadedHeight,
+            imgEl
+        });
+
+    fLog(Object.assign({ '_debug': '' }, imgEl));
+
+    return info;
+}
