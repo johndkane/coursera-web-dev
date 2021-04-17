@@ -13,31 +13,31 @@ function populateGallery(imgUrls, colElements) {
         columnMetaInfos = [],
         totalItems = imgUrls.length || 0,
         avgAmountPerCol = totalItems / totalCols,
-        lastColCount = totalItems - (avgAmountPerCol * totalCols);
+        upperAmountPerCol = Math.ceil(avgAmountPerCol);
 
-    let totalImagesUsed = 0,
+    let totalItemsUsed = 0,
         useCeil = true;
 
     for (let iCol = 0; iCol < colElements.length; iCol += 1) {
         // per column
 
-        let colItemCount = useCeil ? Math.ceil(avgAmountPerCol) : Math.floor(avgAmountPerCol),
-            outerSliceStart = totalImagesUsed,
-            outerSliceEnd = outerSliceStart + colItemCount;
-
-        let colMeta = {
-            colIndex: iCol,
-            colEl: colElements[iCol],
-            colItemCount: colItemCount,
-            items: imgUrls.slice(outerSliceStart, outerSliceEnd),
-            avgAmountPerCol: avgAmountPerCol
-        };
+        const remainingItems = totalItems - totalItemsUsed,
+            colItemCount = remainingItems < upperAmountPerCol ? remainingItems : upperAmountPerCol,
+            outerSliceStart = totalItemsUsed,
+            outerSliceEnd = outerSliceStart + colItemCount,
+            colMeta = {
+                colIndex: iCol,
+                colEl: colElements[iCol],
+                colItemCount: colItemCount,
+                items: imgUrls.slice(outerSliceStart, outerSliceEnd),
+                avgAmountPerCol: avgAmountPerCol
+            };
 
         columnMetaInfos[iCol] = colMeta;
 
         fLog(() => colMeta);
 
-        totalImagesUsed += colItemCount;
+        totalItemsUsed += colItemCount;
         useCeil = !useCeil;
     }
 
