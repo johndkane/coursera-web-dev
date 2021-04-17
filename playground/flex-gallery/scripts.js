@@ -3,7 +3,7 @@ document.flexGallery = document.flexGallery || {};
 const fLog = function (fnGetObj) {
     if (document.flexGallery.customLoggingEnabled && typeof fnGetObj === 'function')
         console.log(fnGetObj());
-}
+};
 
 const populateGallery = function (imgUrls, colElements) {
 
@@ -69,10 +69,10 @@ const populateGallery = function (imgUrls, colElements) {
         }
     }
 
-}
+};
 
-const LoadedImageInfo = function () { };
-const LoadedGalleryItemInfo = function () { };
+const LoadedImageInfo = function () { },
+    LoadedGalleryItemInfo = function () { };
 
 const projectGalleryItem = function (imgUrl, colEl) {
 
@@ -89,7 +89,7 @@ const projectGalleryItem = function (imgUrl, colEl) {
         });
 
     return info;
-}
+};
 
 const loadImage = function (imgUrl) {
 
@@ -107,4 +107,4 @@ const loadImage = function (imgUrl) {
     fLog(Object.assign({ '_debug': '' }, imgEl));
 
     return info;
-}
+};
