@@ -22,7 +22,7 @@ const populateGallery = function (imgUrls, colElements) {
     if (imgUrls.length !== 0 && colElements.length <= 0)
         throw Error('no columns available to fit the ' + imgUrls.length + ' images into');
 
-    // calculate column contents
+    // ** calculate column contents **
 
     const fitToHeight = !!document.flexGallery.fitToHeight,
         totalCols = colElements.length,
@@ -34,6 +34,7 @@ const populateGallery = function (imgUrls, colElements) {
     let usedItemCount = 0;
 
     // create meta data per column
+
     for (let iCol = 0; iCol < colElements.length; iCol += 1) {
 
         const remainingItems = totalItems - usedItemCount,
@@ -55,7 +56,7 @@ const populateGallery = function (imgUrls, colElements) {
         usedItemCount += colItemCount;
     }
 
-    // populate DOM
+    // ** populate DOM **
 
     for (let iCol = 0; iCol < colElements.length; iCol += 1) {
         const colMeta = columnMetaInfos[iCol];
