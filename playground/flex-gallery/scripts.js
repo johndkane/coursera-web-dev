@@ -59,6 +59,7 @@ const populateGallery = function (imgUrls, colElements) {
     // ** populate DOM **
 
     for (let iCol = 0; iCol < colElements.length; iCol += 1) {
+
         const colMeta = columnMetaInfos[iCol];
 
         for (let iItem = 0; iItem < colMeta.items.length; iItem += 1) {
