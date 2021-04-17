@@ -1,11 +1,11 @@
 document.flexGallery = document.flexGallery || {};
 
-function fLog(fnGetObj) {
+const fLog = function (fnGetObj) {
     if (document.flexGallery.customLoggingEnabled && typeof (fnGetObj) === 'function')
         console.log(fnGetObj());
 }
 
-function populateGallery(imgUrls, colElements) {
+const populateGallery = function (imgUrls, colElements) {
 
     // calculate column contents
 
