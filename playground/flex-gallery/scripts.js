@@ -28,8 +28,8 @@ const populateGallery = function (imgUrls, colElements) {
         totalCols = colElements.length,
         columnMetaInfos = [],
         totalItems = imgUrls.length || 0,
-        avgAmountPerCol = totalItems / totalCols,
-        upperAmountPerCol = Math.ceil(avgAmountPerCol);
+        avgItemsPerCol = totalItems / totalCols,
+        upperAmountPerCol = Math.ceil(avgItemsPerCol);
 
     let usedItemCount = 0;
 
@@ -45,7 +45,7 @@ const populateGallery = function (imgUrls, colElements) {
                 colEl: colElements[iCol],
                 colItemCount: colItemCount,
                 items: imgUrls.slice(outerSliceStart, outerSliceEnd),
-                avgAmountPerCol: avgAmountPerCol
+                avgAmountPerCol: avgItemsPerCol
             };
 
         fLog(() => colMeta);
