@@ -85,7 +85,8 @@ const projectGalleryItem = function (imgUrl, colEl) {
             colWidth,
             loadedImageInfo,
             imgWidthDiffFactor,
-            galleryImageHeight
+            galleryImageHeight,
+            imgUrl
         });
 
     return info;
@@ -101,7 +102,8 @@ const loadImage = function (imgUrl) {
         info = Object.assign(new LoadedImageInfo(), {
             loadedWidth,
             loadedHeight,
-            imgEl
+            imgEl,
+            imgUrl
         });
 
     fLog(Object.assign({ '_debug': '' }, imgEl));
