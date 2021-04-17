@@ -1,50 +1,56 @@
-let itemUrls = ["https://loremflickr.com/240/320/dog",
-    "https://loremflickr.com/320/240/cat",
-    "https://loremflickr.com/200/200/dog",
-    "https://loremflickr.com/640/800/parrot",
-    "https://loremflickr.com/800/640/flower",
-    "https://loremflickr.com/350/250/hill",
-    "https://loremflickr.com/240/320/browser",
-    "https://loremflickr.com/300/300/barn",
-    "https://loremflickr.com/500/400/cartoon",
-    "https://loremflickr.com/400/500/cow",
-    "https://loremflickr.com/450/425/chicken",
-    "https://loremflickr.com/425/450/field",
-    "https://loremflickr.com/1000/1000/grazing"];
+document.flexGallery = document.flexGallery || {};
 
-function populateGallery() {
-    itemUrls = itemUrls || [];
+function fLog(fnGetObj) {
+    if (document.flexGallery.customLoggingEnabled && typeof (fnGetObj) === 'function')
+        console.log(fnGetObj());
+}
+
+function populateGallery(imgUrls, colElements) {
 
     // calculate column contents
 
-    const colElements = document.querySelectorAll('body > div.row > div.column'),
-        totalCols = colElements.length,
-        columnMetas = [],
-        totalItems = itemUrls.length || 0,
-        maxItemsPerCol = Math.ceil(totalItems / totalCols),
-        lastColCount = totalItems - (maxItemsPerCol * totalCols);
+    const totalCols = colElements.length,
+        columnMetaInfos = [],
+        totalItems = imgUrls.length || 0,
+        avgAmountPerCol = totalItems / totalCols,
+        lastColCount = totalItems - (avgAmountPerCol * totalCols);
 
-    for (let i = 0; i < colElements.length; i += 1) {
-        let count = (i == totalCols - 1) ? lastColCount : maxItemsPerCol,
-            sliceStart = i * maxItemsPerCol,
-            sliceEnd = sliceStart + maxItemsPerCol;
+    let totalImagesUsed = 0,
+        useCeil = true;
 
-        columnMetas[i] = {
-            index: i,
-            colEl: colElements[i],
-            items: itemUrls.slice(sliceStart, sliceEnd),
-            calcCount: maxItemsPerCol
+    for (let iCol = 0; iCol < colElements.length; iCol += 1) {
+        // per column
+
+        let colItemCount = useCeil ? Math.ceil(avgAmountPerCol) : Math.floor(avgAmountPerCol),
+            outerSliceStart = totalImagesUsed,
+            outerSliceEnd = outerSliceStart + colItemCount;
+
+        let colMeta = {
+            colIndex: iCol,
+            colEl: colElements[iCol],
+            colItemCount: colItemCount,
+            items: imgUrls.slice(outerSliceStart, outerSliceEnd),
+            avgAmountPerCol: avgAmountPerCol
         };
+
+        columnMetaInfos[iCol] = colMeta;
+
+        fLog(() => colMeta);
+
+        totalImagesUsed += colItemCount;
+        useCeil = !useCeil;
     }
 
     // populate DOM
 
-    for (let i = 0; i < colElements.length - 1; i += 1) {
-        let colMeta = columnMetas[i];
-        for(let j = 0; j < colMeta.items.length; j += 1) {
-            let img = document.createElement('img');
-            img.src = colMeta.items[j];
+    for (let iCol = 0; iCol < colElements.length; iCol += 1) {
+        const colMeta = columnMetaInfos[iCol];
+
+        for (let iItem = 0; iItem < colMeta.items.length; iItem += 1) {
+            const img = document.createElement('img');
+            img.src = colMeta.items[iItem];
             colMeta.colEl.appendChild(img);
         }
     }
+
 }
