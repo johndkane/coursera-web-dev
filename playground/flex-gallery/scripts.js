@@ -48,9 +48,9 @@ const populateGallery = function (imgUrls, colElements) {
                 avgAmountPerCol: avgAmountPerCol
             };
 
-        columnMetaInfos[iCol] = colMeta;
-
         fLog(() => colMeta);
+
+        columnMetaInfos[iCol] = colMeta;
 
         usedItemCount += colItemCount;
     }
