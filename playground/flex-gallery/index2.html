@@ -2,9 +2,9 @@
 <html>
 
 <head lang="en-ca">
+  <script src="scripts.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="styles.css">
-  <script src="scripts.js"></script>
 </head>
 
 <body>
@@ -13,6 +13,7 @@
   <div class="header">
     <h1>Responsive Image Grid</h1>
     <p>Resize the browser window to see the responsive effect.</p>
+    <p>from <a href="https://www.w3schools.com/css/tryit.asp?filename=trycss3_flexbox_image_gallery" target="_blank">w3schools</a> </p>
   </div>
 
   <!-- Photo Grid -->
@@ -33,7 +34,7 @@
   <script type="text/javascript">
 
     document.flexGallery.customLoggingEnabled = true;
-    document.flexGallery.fitToHeight = true;
+    document.flexGallery.heightBalancingEnabled = true;
 
     let imgUrls = ["https://loremflickr.com/240/320/dog",
       "https://loremflickr.com/320/240/cat",

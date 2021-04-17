@@ -7,74 +7,81 @@ const fLog = function (fnGetObj) {
 
 const populateGallery = function (imgUrls, colElements) {
 
-    if (!imgUrls)
-        throw Error('missing the image urls argument');
+    document.addEventListener("DOMContentLoaded", function () {
 
-    if (!Array.isArray(imgUrls))
-        throw Error('the image urls argument is not an array');
+        if (!imgUrls)
+            throw Error('missing the image urls argument');
 
-    if (!colElements)
-        throw Error('missing the column elements collection argument');
+        if (!Array.isArray(imgUrls))
+            throw Error('the image urls argument is not an array');
 
-    if (colElements['length'] === undefined)
-        throw Error('column elements collection argument does not have a length property');
+        if (!colElements)
+            throw Error('missing the column elements collection argument');
 
-    if (imgUrls.length !== 0 && colElements.length <= 0)
-        throw Error('no columns available to fit the ' + imgUrls.length + ' images into');
+        if (colElements['length'] === undefined)
+            throw Error('column elements collection argument does not have a length property');
 
-    // ** calculate column contents **
+        if (imgUrls.length !== 0 && colElements.length <= 0)
+            throw Error('no columns available to fit the ' + imgUrls.length + ' images into');
 
-    const fitToHeight = !!document.flexGallery.fitToHeight,
-        totalCols = colElements.length,
-        columnMetaInfos = [],
-        totalItems = imgUrls.length,
-        avgItemsPerCol = totalItems / totalCols,
-        upperAmountPerCol = Math.ceil(avgItemsPerCol);
+        // ** calculate column contents **
 
-    let usedItemCount = 0;
+        const balanceHeight = !!document.flexGallery.heightBalancingEnabled,
+            totalCols = colElements.length,
+            columnMetaInfos = [],
+            totalItems = imgUrls.length,
+            avgItemsPerCol = totalItems / totalCols,
+            upperAmountPerCol = Math.ceil(avgItemsPerCol);
 
-    // create meta data per column
+        const imgLoadingPromises = imgUrls.map((url) => loadImageAsync(url));
 
-    for (let iCol = 0; iCol < colElements.length; iCol += 1) {
+        Promise.allSettled(imgLoadingPromises).
+            then(imageInfos => imageInfos.forEach(result => fLog(() => result.value)));
 
-        const remainingItems = totalItems - usedItemCount,
-            colItemCount = remainingItems < upperAmountPerCol ? remainingItems : upperAmountPerCol,
-            outerSliceStart = usedItemCount,
-            outerSliceEnd = outerSliceStart + colItemCount,
-            colMeta = {
-                colIndex: iCol,
-                colEl: colElements[iCol],
-                colItemCount: colItemCount,
-                items: imgUrls.slice(outerSliceStart, outerSliceEnd),
-                avgAmountPerCol: avgItemsPerCol
-            };
+        fLog(() => imgLoadingPromises);
 
-        fLog(() => colMeta);
+        let usedItemCount = 0;
 
-        columnMetaInfos[iCol] = colMeta;
+        // create meta data per column
 
-        usedItemCount += colItemCount;
-    }
+        for (let iCol = 0; iCol < colElements.length; iCol += 1) {
 
-    // ** populate DOM **
+            const remainingItems = totalItems - usedItemCount,
+                colItemCount = remainingItems < upperAmountPerCol ? remainingItems : upperAmountPerCol,
+                outerSliceStart = usedItemCount,
+                outerSliceEnd = outerSliceStart + colItemCount,
+                colMeta = {
+                    colIndex: iCol,
+                    colEl: colElements[iCol],
+                    colItemCount: colItemCount,
+                    items: imgUrls.slice(outerSliceStart, outerSliceEnd),
+                    avgAmountPerCol: avgItemsPerCol
+                };
 
-    for (let iCol = 0; iCol < colElements.length; iCol += 1) {
+            columnMetaInfos[iCol] = colMeta;
 
-        const colMeta = columnMetaInfos[iCol];
-
-        for (let iItem = 0; iItem < colMeta.items.length; iItem += 1) {
-            const img = document.createElement('img');
-            img.src = colMeta.items[iItem];
-            colMeta.colEl.appendChild(img);
+            usedItemCount += colItemCount;
         }
-    }
 
+        // ** populate DOM **
+
+        for (let iCol = 0; iCol < colElements.length; iCol += 1) {
+
+            const colMeta = columnMetaInfos[iCol];
+
+            for (let iItem = 0; iItem < colMeta.items.length; iItem += 1) {
+                const img = document.createElement('img');
+                img.src = colMeta.items[iItem];
+                colMeta.colEl.appendChild(img);
+            }
+        }
+    });
 };
 
 const projectGalleryItem = function (imgUrl, colEl) {
 
     const colWidth = colEl.width,
-        loadedImageInfo = loadImage(imgUrl),
+        loadedImageInfo = loadImageAsync(imgUrl),
         imgWidthDiffFactor = colWidth / loadedImageInfo.loadedWidth,
         galleryImageHeight = loadedImageInfo.loadedHeight * imgWidthDiffFactor,
         info = Object.assign(new LoadedGalleryItemInfo(), {
@@ -89,24 +96,60 @@ const projectGalleryItem = function (imgUrl, colEl) {
     return info;
 };
 
-const loadImage = function (imgUrl) {
+const loadImageAsync = function (imgUrl) {
 
-    const imgEl = document.createElement("img");
-    imgEl.src = imgUrl;
+    return new Promise(function (resolve, reject) {
 
-    const loadedWidth = imgEl.width,
-        loadedHeight = imgEl.height,
-        info = Object.assign(new LoadedImageInfo(), {
-            loadedWidth,
-            loadedHeight,
-            imgEl,
-            imgUrl
-        });
+        const workshopDiv = document.getElementById(workshopDivId);
+        if (!workshopDiv)
+            throw Error('flex gallery workshop div element is missing');
 
-    fLog(Object.assign({ '_debug': '' }, imgEl));
+        const imgEl = document.createElement("img"),
+            info = Object.assign(new LoadedImageInfo(), {
+                imgUrl,
+                imgEl,
+                ready: false
+            });
 
-    return info;
+        imgEl.onload = function () {
+            info.loadedWidth = imgEl.width;
+            info.loadedHeight = imgEl.height;
+            info.ready = true;
+            
+            fLog(() => info);
+
+            resolve(info);
+        };
+
+        imgEl.onerror = function(message, source, lineno, colno, error) {
+            reject(message);
+        };
+
+        imgEl.src = imgUrl;
+
+        workshopDiv.appendChild(imgEl);
+    });
 };
 
 const LoadedImageInfo = function () { },
     LoadedGalleryItemInfo = function () { };
+
+const workshopDivId = 'flexGalleryWorkshopDiv';
+
+document.addEventListener("DOMContentLoaded", function () {
+    let workshopDiv = document.getElementById(workshopDivId);
+
+    if (!workshopDiv) {
+        workshopDiv = document.createElement('div');
+
+        workshopDiv.id = workshopDivId;
+        workshopDiv.style.position = 'absolute';
+        workshopDiv.style.left = 1000;
+        workshopDiv.style.right = 1000;
+        workshopDiv.style.backgroundColor = 'yellow';
+        workshopDiv.style.boxSizing = 'border-box';
+
+        document.body.appendChild(workshopDiv);
+    }
+
+});
