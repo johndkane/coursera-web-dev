@@ -30,6 +30,19 @@
     vertical-align: middle;
     width: 100%;
   }
+
+  .column:nth-child(1) {
+    background-color:red;
+  }
+  .column:nth-child(2) {
+    background-color: green;
+  }
+  .column:nth-child(3) {
+    background-color: blue;
+  }
+  .column:nth-child(4) {
+    background-color: yellow;
+  }
   
   /* Responsive layout - makes a two column-layout instead of four columns */
   @media (max-width: 800px) {

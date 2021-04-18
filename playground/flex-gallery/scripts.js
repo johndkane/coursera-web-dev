@@ -31,14 +31,22 @@ const populateGallery = function (imgUrls, colElements) {
             columnMetaInfos = [],
             totalItems = imgUrls.length,
             avgItemsPerCol = totalItems / totalCols,
-            upperAmountPerCol = Math.ceil(avgItemsPerCol);
+            countPerCol = Math.ceil(avgItemsPerCol);
 
-        const imgLoadingPromises = imgUrls.map((url) => loadImageAsync(url));
+            const visuallyBalance = function (imgInfo) {
+                // aim for visually (bottom line) balanced gallery columns
+                
+            };
 
-        Promise.allSettled(imgLoadingPromises).
-            then(imageInfos => imageInfos.forEach(result => fLog(() => result.value)));
+            const numericallyBalance = function (imgInfo) {
+                // aim for same number of pictures in each column
 
-        fLog(() => imgLoadingPromises);
+            };
+        
+        imgUrls.map((url) => loadImageAsync(url)).
+            forEach(promise => promise.then(imgInfo => visuallyBalance(imgInfo)));
+
+
 
         let usedItemCount = 0;
 
@@ -47,7 +55,7 @@ const populateGallery = function (imgUrls, colElements) {
         for (let iCol = 0; iCol < colElements.length; iCol += 1) {
 
             const remainingItems = totalItems - usedItemCount,
-                colItemCount = remainingItems < upperAmountPerCol ? remainingItems : upperAmountPerCol,
+                colItemCount = remainingItems < countPerCol ? remainingItems : countPerCol,
                 outerSliceStart = usedItemCount,
                 outerSliceEnd = outerSliceStart + colItemCount,
                 colMeta = {
@@ -88,6 +96,7 @@ const projectGalleryItem = function (imgUrl, colEl) {
             colEl,
             colWidth,
             loadedImageInfo,
+
             imgWidthDiffFactor,
             galleryImageHeight,
             imgUrl
@@ -115,13 +124,13 @@ const loadImageAsync = function (imgUrl) {
             info.loadedWidth = imgEl.width;
             info.loadedHeight = imgEl.height;
             info.ready = true;
-            
+
             fLog(() => info);
 
             resolve(info);
         };
 
-        imgEl.onerror = function(message, source, lineno, colno, error) {
+        imgEl.onerror = function (message, source, lineno, colno, error) {
             reject(message);
         };
 
@@ -143,6 +152,7 @@ document.addEventListener("DOMContentLoaded", function () {
         workshopDiv = document.createElement('div');
 
         workshopDiv.id = workshopDivId;
+        workshopDiv.style.visibility = 'hidden';
         workshopDiv.style.position = 'absolute';
         workshopDiv.style.left = 1000;
         workshopDiv.style.right = 1000;
