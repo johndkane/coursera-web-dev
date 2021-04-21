@@ -1,0 +1,121 @@
+/*** base styles ***/
+
+* {
+    box-sizing: border-box;
+    /* include some css resets here */
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 1em;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+body {
+    margin: 0px 10px;
+}
+
+header {
+    margin-top: 35px;
+    margin-bottom: 55px;
+}
+
+footer {
+    position: relative;
+    padding-top: 50px;
+    width: 100%;
+    text-align: center;
+    font-size: 0.75em;
+    font-style: italic;
+    clear: both;
+}
+
+p {
+    margin-bottom: 8px;
+    margin-top: 5px;
+}
+
+h1 {
+    font-size: 1.75em;
+    text-align: center;
+}
+
+div.column {
+    position: relative;
+    float: left;
+}
+
+section.menu-item {
+    position: relative;
+    margin: 10px;
+    border: 1px solid black;
+    padding: 15px;
+    padding-top: 2.5em;
+    background-color: lightsteelblue;
+}
+
+section.menu-item h2 {
+    /* Menu Item Title */
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: 1px solid black;
+    border-right: 0px hidden transparent;
+    border-top: 0px hidden transparent;
+    padding: 5px 25px;
+    font-size: 1.25em;
+}
+
+@media (min-width: 992px) {
+    /*** Desktop breakpoint ***/
+    .col-desk {
+        width: 33.33%;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    /*** Tablet breakpoint ***/
+    .col-tablet-half {
+        width: 50%;
+    }
+    .col-tablet-wide {
+        width: 100%;
+    }
+}
+
+@media (max-width: 767px) {
+    /*** Mobile breakpoint ***/
+    .col-mobile {
+        width: 100%;
+    }
+    body {
+        margin: 0px 50px;
+    }
+}
+
+section.menu-item.sushi h2 {
+    background-color: salmon;
+}
+
+section.menu-item.chicken h2 {
+    background-color: beige;
+}
+
+section.menu-item.beef h2 {
+    background-color: brown;
+    color: lightpink;
+}
+
+section.menu-item.sushi span.item-desc::before {
+    /* sushi emoji */
+    content: "\1F41F ";
+}
+
+section.menu-item.chicken span.item-desc::before {
+    /* chicken emoji */
+    content: "\1F414 ";
+}
+
+section.menu-item.beef span.item-desc::before {
+    /* beef emoji */
+    content: "\1F404 ";
+}
